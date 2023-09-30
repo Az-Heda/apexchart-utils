@@ -353,7 +353,7 @@ class ProgressChart extends MyChart {
 	}
 }
 
-class Heatmap extends MyChart {
+class HeatmapChart extends MyChart {
 	constructor(options={}) {
 		super(options);
 		this.addData('heatmap', options);
