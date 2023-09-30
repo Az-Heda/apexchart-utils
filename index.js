@@ -65,7 +65,7 @@ class Color {
 			let nc = (Math.abs(parseInt(c, 16) - 255)).toString(16)
 			newColor += (nc.length == 1) ? '0'+nc : nc
 		}
-		return newColor;
+		return newColor.toUpperCase();
 	}
 
 	static invertIfDarkTheme(hexColor) {

@@ -41,3 +41,12 @@ let radar = new RadarChart(options);
 ```js
 let heatmap = new HeatmapChart(options);
 ```
+
+
+# Color class
+```js
+console.log(Color.blend('#FF0000', '#00FF00', 0.5));
+>>> #808000
+console.log(Color.invert('#123123'));
+>>> #EEDDCC
+```
