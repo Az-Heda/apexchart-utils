@@ -4,9 +4,230 @@
 		<title>Testing</title>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+		<!-- <script src="https://unpkg.com/azheda-utils/dist/client.js"></script> -->
+		<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 		<script src="index.js"></script>
-	</head>
-	<body>
+		<script>
 
+			window.Apex = {
+				chart: {
+					height: 300,
+				},
+				dataLabels: { enabled: false },
+			}
+			
+			function randomNumber(min, max) {
+				return Math.floor(Math.random() * (Math.max(min, max) - Math.min(min, max)) + Math.min(min, max))
+			}
+
+			function getDataset(l, min=1, max=100) {
+				return new Array(l).fill(0).map((item) => { return randomNumber(min, max) });
+			}
+
+			const debug = true;
+			Array.prototype.randomize = function() {
+				let currentIndex = this.length;
+				let randomIndex;
+			
+				while (0 != currentIndex) {
+					randomIndex = Math.floor(Math.random() * currentIndex);
+					currentIndex--;
+					[this[currentIndex], this[randomIndex]] = [this[randomIndex], this[currentIndex]];
+				}
+				return this;
+			};
+
+			const labels1 = [
+				'Gennaio', 'Febbario', 'Marzo',
+				'Aprile', 'Maggio', 'Giugno',
+				'Luglio', 'Agosto', 'Settembre',
+				'Ottobre', 'Novembre', 'Dicembre'];
+			const data1 = getDataset(labels1.length);
+			const dataset1 = [{ data: data1, name: 'Valore' }];
+
+			const data2Range = { min: 0, max: 100 }
+			const labels2 = new Array(31).fill(0).map((item, _) => { return _+1 });
+			const data2 = getDataset(labels2.length, data2Range.min, data2Range.max);
+			const dataset2 = [...labels1.map((l,i) => {
+				const giorni = [31, 28+((new Date(Date.now()).getFullYear() % 4 == 0) ? 1 : 0), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+				return { data: getDataset(giorni[i]), name: l}
+			})];
+
+			const data3 = getDataset(5);
+			const labels3 = new Array(data3.length).fill(0).map((_,i) => { return `Val #${i}`});
+
+			function addAreaChart() {
+				const config = {
+					id: 'AreaChart',
+					height: 350,
+					series: [ ...dataset1 ],
+					labels: labels1,
+					title: 'Class AreaChart',
+					curve: 'smooth',
+					debug,
+				}
+				let area = new AreaChart(config)
+			}
+
+			function addBarChart() {
+				const config = {
+					id: 'BarChart',
+					height: 350,
+					series: [ ...dataset1 ],
+					labels: labels1,
+					title: 'Class BarChart',
+					columnWidth: '75%',
+					horizontal: true,
+					debug,
+				}
+				let bar = new BarChart(config)
+			}
+
+			function addLineChart() {
+				const config = {
+					id: 'LineChart',
+					height: 350,
+					series: [ ...dataset1 ],
+					labels: labels1,
+					title: 'Class LineChart',
+					curve: 'smooth',
+					markers: 4,
+					debug
+				}
+				let line = new LineChart(config);
+			}
+
+			function addHeatmapChart() {
+				const config = {
+					id: 'HeatmapChart',
+					height: 500,
+					series: [...dataset2].sort((a, b) => { return (labels1.indexOf(a.name) < labels1.indexOf(b.name)) ? 1 : (labels1.indexOf(a.name) > labels1.indexOf(b.name)) ? -1 : 0}),
+					labels: labels2,
+					title: 'Class HeatmapChart',
+					rangeColor: [
+						{ from: 0,  to: 15,  color: Color.blend('#00FF00', '#FF0000', 0), name: '0-15' },
+						{ from: 16, to: 30,  color: Color.blend('#00FF00', '#FF0000', 0.1666), name: '16-30' },
+						{ from: 31, to: 45,  color: Color.blend('#00FF00', '#FF0000', 0.3333), name: '31-45' },
+						{ from: 46, to: 60,  color: Color.blend('#00FF00', '#FF0000', 0.50), name: '46-60' },
+						{ from: 61, to: 75,  color: Color.blend('#00FF00', '#FF0000', 0.6666), name: '61-75' },
+						{ from: 76, to: 90,  color: Color.blend('#00FF00', '#FF0000', 0.8333), name: '76-90' },
+						{ from: 91, to: 100, color: Color.blend('#00FF00', '#FF0000', 1), name: '91+' },
+					],
+					useFillColorAsStroke: false,
+					debug
+				}
+				let heatmap = new Heatmap(config);
+			}
+
+			function addPieChart() {
+				const config = {
+					id: 'PieChart',
+					height: 300,
+					series: data3,
+					labels: labels3,
+					title: 'Class PieChart',
+					position: 'left',
+					debug,
+				}
+				let pie = new PieChart(config);
+			}
+
+			function addDonutChart() {
+				const config = {
+					id: 'DonutChart',
+					height: 300,
+					series: data3,
+					labels: labels3,
+					title: 'Class DonutChart',
+					size: '40%',
+					position: 'bottom',
+					showLabels: false,
+					debug,
+				}
+				let donut = new DonutChart(config);
+			}
+
+			function addPolarAreaChart() {
+				const config = {
+					id: 'PolarAreaChart',
+					height: 300,
+					series: data3,
+					labels: labels3,
+					title: 'Class PolarAreaChart',
+					position: 'right',
+					debug,
+				}
+				let donut = new PolarAreaChart(config);
+			}
+
+			function addRadarChart() {
+				const config = {
+					id: 'RadarChart',
+					height: 500,
+					series: [ ...dataset1 ],
+					labels: labels1,
+					title: 'Class RadarChart',
+					debug,
+				}
+				let radar = new RadarChart(config);
+			}
+
+			function addProgressChart() {
+				const additionalData = [
+					{},
+					{ startAngle: -90, endAngle: 90 },
+					{ startAngle: -135, endAngle: 135 },
+				]
+				for (let pos = 0; pos < 3; pos ++) {
+					const config = {
+						id: `ProgressChart-${pos}`,
+						height: 300,
+						series: [randomNumber(50, 100)],
+						labels: ['Progresso'],
+						debug,
+						...additionalData[pos],
+					}
+					let progress = new ProgressChart(config);
+				}
+			}
+
+			function start() {
+				addAreaChart();
+				addBarChart();
+				addLineChart();
+				addHeatmapChart();
+				addPieChart();
+				addDonutChart();
+				addRadarChart();
+				addPolarAreaChart();
+				addProgressChart();
+			}
+		</script>
+	</head>
+	<body onload="start();">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-lg-4 col-md-4 col-sm-4" id="AreaChart"></div>
+				<div class="col-lg-4 col-md-4 col-sm-4" id="BarChart"></div>
+				<div class="col-lg-4 col-md-4 col-sm-4" id="LineChart"></div>
+			</div>
+			<div class="row">
+				<div class="col-lg-7 col-md-7 col-sm-7" id="HeatmapChart"></div>
+				<div class="col-lg-5 col-md-5 col-sm-5" id="RadarChart"></div>
+			</div>
+			<div class="row">
+				<div class="col-lg-4 col-md-4 col-sm-4" id="PieChart"></div>
+				<div class="col-lg-4 col-md-4 col-sm-4" id="DonutChart"></div>
+				<div class="col-lg-4 col-md-4 col-sm-4" id="PolarAreaChart"></div>
+			</div>
+			<div class="row">
+				<div class="col-lg-4 col-md-4 col-sm-4" id="ProgressChart-0"></div>
+				<div class="col-lg-4 col-md-4 col-sm-4" id="ProgressChart-1"></div>
+				<div class="col-lg-4 col-md-4 col-sm-4" id="ProgressChart-2"></div>
+			</div>
+		</div>
 	</body>
 </html>
