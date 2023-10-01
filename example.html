@@ -108,13 +108,13 @@
 					labels: labels2,
 					title: 'Class HeatmapChart',
 					rangeColor: [
-						{ from: 0,  to: 15,  color: Color.blend('#00FF00', '#FF0000', 0), name: '0-15' },
-						{ from: 16, to: 30,  color: Color.blend('#00FF00', '#FF0000', 0.1666), name: '16-30' },
-						{ from: 31, to: 45,  color: Color.blend('#00FF00', '#FF0000', 0.3333), name: '31-45' },
-						{ from: 46, to: 60,  color: Color.blend('#00FF00', '#FF0000', 0.50), name: '46-60' },
-						{ from: 61, to: 75,  color: Color.blend('#00FF00', '#FF0000', 0.6666), name: '61-75' },
-						{ from: 76, to: 90,  color: Color.blend('#00FF00', '#FF0000', 0.8333), name: '76-90' },
-						{ from: 91, to: 100, color: Color.blend('#00FF00', '#FF0000', 1), name: '91+' },
+						{ from: 0,  to: 15,  color: Color.blend('#00FF00', '#FF0000', 100 / 6 * 0), name: '0-15'  },
+						{ from: 16, to: 30,  color: Color.blend('#00FF00', '#FF0000', 100 / 6 * 1), name: '16-30' },
+						{ from: 31, to: 45,  color: Color.blend('#00FF00', '#FF0000', 100 / 6 * 2), name: '31-45' },
+						{ from: 46, to: 60,  color: Color.blend('#00FF00', '#FF0000', 100 / 6 * 3), name: '46-60' },
+						{ from: 61, to: 75,  color: Color.blend('#00FF00', '#FF0000', 100 / 6 * 4), name: '61-75' },
+						{ from: 76, to: 90,  color: Color.blend('#00FF00', '#FF0000', 100 / 6 * 5), name: '76-90' },
+						{ from: 91, to: 100, color: Color.blend('#00FF00', '#FF0000', 100 / 6 * 6), name: '91+'   },
 					],
 					useFillColorAsStroke: false,
 					debug
@@ -180,13 +180,18 @@
 					{},
 					{ startAngle: -90, endAngle: 90 },
 					{ startAngle: -135, endAngle: 135 },
+				];
+				const dataForProgress = [
+					[randomNumber(50, 100)],
+					[randomNumber(50, 100)],
+					[randomNumber(50, 100), randomNumber(50, 100), randomNumber(50, 100), randomNumber(50, 100)],
 				]
 				for (let pos = 0; pos < 3; pos ++) {
 					const config = {
 						id: `ProgressChart-${pos}`,
 						height: 300,
-						series: [randomNumber(50, 100)],
-						labels: ['Progresso'],
+						series: [...dataForProgress[pos]],
+						// labels,
 						title: 'class ProgressChart',
 						debug,
 						...additionalData[pos],

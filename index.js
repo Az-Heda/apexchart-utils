@@ -21,23 +21,13 @@ class Color {
 			let hex = Math.round(num).toString(16);
 			return (hex.length == 1) ? '0'+hex : hex;
 		}
+
 		if (color1.length != 4 && color1.length != 7)
 			throw new Error('colors must be provided as hexes');
 		if (color2.length != 4 && color2.length != 7)
 			throw new Error('colors must be provided as hexes');
 		if (percentage > 1 || percentage < 0)
 			throw new Error('percentage must be between 0 and 1');
-
-		let cvs = document.createElement('canvas');
-		let ctx = cvs.getContext('2d');
-		cvs.width = 90;
-		cvs.height = 25;
-
-		ctx.fillStyle = color1;
-		ctx.fillRect(0, 0, 30, 25);
-
-		ctx.fillStyle = color2;
-		ctx.fillRect(60, 0, 30, 25);
 
 		if (color1.length == 4)
 			color1 = color1[1] + color1[1] + color1[2] + color1[2] + color1[3] + color1[3];
@@ -56,8 +46,6 @@ class Color {
 			(1 - percentage) * color1[2] + percentage * color2[2]
 		];
 		color3 = '#' + int_to_hex(color3[0]) + int_to_hex(color3[1]) + int_to_hex(color3[2]);
-		ctx.fillStyle = color3;
-		ctx.fillRect(30, 0, 30, 25);
 		return color3;
 	}
 
@@ -168,6 +156,8 @@ class MyChartDefault {
 		return this.default.toolbar;
 	}
 }
+
+
 
 class MyChart extends MyChartDefault {
 	constructor(options={}) {
