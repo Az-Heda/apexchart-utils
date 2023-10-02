@@ -113,7 +113,7 @@ class Color {
 	 * @param {float} percentage Percentage of Brightness/Shade to apply (positive for brightness, negative for shade)
 	 * @returns {String} Hex color with the given filter
 	 */
-	static shadeColor(color, percentage) {
+	static shade(color, percentage) {
 		if (!(percentage >= -1 && percentage <= 1)) { throw new Error('Percentage must be between -1 and 1')}
 		if (percentage > 0) {
 			return this.blend(color, '#FFFFFF', percentage);
@@ -142,12 +142,12 @@ class MyChartDefault {
 				align: options?.titleAlign || 'center',
 				style: {
 					fontSize: options?.titleSize || '18px',
-					color: Color.textColor(),
+					color: options?.titleColor || Color.textColor(),
 				}
 			},
 			grid: {
-				show: true,
-				borderColor: Color.textColor() + '20',
+				show: options?.grid || true,
+				borderColor: options?.gridBorderColor || (Color.textColor() + '20'),
 			}
 		}
 	}
@@ -170,18 +170,18 @@ class MyChart extends MyChartDefault {
 		this.config = {
 			yaxis: {
 				labels: {
-					show: true,
+					show: options?.showLabelOnYAxis || true,
 					style: {
-						colors: Color.textColor()
+						colors: options?.labelColor || options?.yLabelColor|| Color.textColor()
 					}
 				}
 			},
 			xaxis: {
 				labels: {
-					show: true,
+					show: options?.showLabelOnXAxis || true,
 					hideOverlappingLabels: false,
 					style: {
-						colors: Color.textColor()
+						colors: options?.labelColor || options?.xLabelColor || Color.textColor()
 					}
 				},
 				categories: options?.labels || []
@@ -189,8 +189,8 @@ class MyChart extends MyChartDefault {
 			title: this.default.title,
 			grid: this.default.grid,
 		};
-		if (options?.labels?.x?.isNumber) { this.config.yaxis.labels.style.formatter = (val) => this.#_numberFormatter(val, options?.formatterOptions || {}); }
-		if (options?.labels?.y?.isNumber) { this.config.xaxis.labels.style.formatter = (val) => this.#_numberFormatter(val, options?.formatterOptions || {}); }
+		if (options?.labelXisNumber) { this.config.yaxis.labels.style.formatter = (val) => this.#_numberFormatter(val, options?.formatterOptions || {}); }
+		if (options?.labelYisNumber) { this.config.xaxis.labels.style.formatter = (val) => this.#_numberFormatter(val, options?.formatterOptions || {}); }
 	}
 
 	draw() {
@@ -219,7 +219,7 @@ class MyChart extends MyChartDefault {
 	}
 
 	#_numberFormatter(val, options={}) {
-		return (options?.before || '') + this.#_getNumber(val) + (options?.after || '');
+		return (options?.before || '') + this.#_getNumber(val, options?.minimumFractionDigits || 0) + (options?.after || '');
 	}
 
 	#_getNumber(val, minimumFractionDigits=0) {
@@ -231,6 +231,7 @@ class AreaChart extends MyChart {
 	constructor(options={}) {
 		super(options);
 		this.addData('area', options);
+
 		let possibleCurves = ['smooth', 'straight', 'stepline'].sort();
 		if (possibleCurves.includes(options?.curve || 'smooth')) {
 			this.config.stroke = {
@@ -251,6 +252,7 @@ class AreaChart extends MyChart {
 class BarChart extends MyChart {
 	constructor(options={}) {
 		super(options);
+		this.addData('bar', options);
 
 		this.config.plotOptions = { bar: { dataLabels: {}} };
 		if (options?.horizontal) { this.config.plotOptions.bar.horizontal = options.horizontal; }
@@ -261,7 +263,7 @@ class BarChart extends MyChart {
 		if (possiblePosition.includes(options?.position || 'top')) {
 			this.config.plotOptions.bar.dataLabels.position = options.position || 'top';
 		} else throw new Error(`Position: "${options?.position}" not valid; Accepted: ${possiblePosition.join(', ')}`)
-		this.addData('bar', options);
+		
 		this.draw();
 	}
 }
@@ -270,6 +272,7 @@ class LineChart extends MyChart {
 	constructor(options={}) {
 		super(options);
 		this.addData('line', options);
+
 		let possibleCurves = ['smooth', 'straight', 'stepline'].sort();
 		if (possibleCurves.includes(options?.curve || 'smooth')) {
 			this.config.stroke = {
@@ -296,6 +299,7 @@ class LineChart extends MyChart {
 		if (options?.markersHover) {
 			this.config.markers.hover = { size: options.markersHover}
 		}
+
 		this.draw();
 	}
 }
@@ -303,6 +307,8 @@ class LineChart extends MyChart {
 class PieChart extends MyChart {
 	constructor(options={}) {
 		super(options);
+		this.addData('pie', options);
+
 		this.config.plotOptions = { pie: {} };
 		this.config.legend = {};
 
@@ -318,7 +324,6 @@ class PieChart extends MyChart {
 			this.config.legend.horizontalAlign = options?.align || 'center'
 		} else throw new Error(`Align: "${options?.align}" not valid; Accepted: ${possibleAlign.join(', ')}`)
 
-		this.addData('pie', options);
 		this.draw();
 	}
 }
@@ -326,6 +331,7 @@ class PieChart extends MyChart {
 class DonutChart extends MyChart {
 	constructor(options={}) {
 		super(options);
+		this.addData('donut', options);
 
 		this.config.legend = {};
 		this.config.plotOptions = { pie: { donut: {} } };
@@ -345,7 +351,6 @@ class DonutChart extends MyChart {
 			this.config.legend.horizontalAlign = options?.align || 'center'
 		} else throw new Error(`Align: "${options?.align}" not valid; Accepted: ${possibleAlign.join(', ')}`)
 
-		this.addData('donut', options);
 		this.draw();
 	}
 }
