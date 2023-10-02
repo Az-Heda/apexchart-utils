@@ -1,3 +1,18 @@
+/**
+ * @typedef {Color} Color
+ * @typedef {MyChartDefault} MyChartDefault
+ * @typedef {MyChart} MyChart
+ * @typedef {AreaChart} AreaChart
+ * @typedef {BarChart} BarChart
+ * @typedef {LineChart} LineChart
+ * @typedef {PieChart} PieChart
+ * @typedef {DonutChart} DonutChart
+ * @typedef {PolarAreaChart} PolarAreaChart
+ * @typedef {RadarChart} RadarChart
+ * @typedef {ProgressChart} ProgressChart
+ * @typedef {HeatmapChart} HeatmapChart
+ * */
+
 class Color {
 	static get textColorLightTheme() { return '#000000' };
 	static get textColorDarkTheme()  { return '#FFFFFF' };
@@ -126,6 +141,29 @@ class Color {
 }
 
 class MyChartDefault {
+	/**
+	 * @param {object} options ```js
+	 * { titleAlign: 'center' || 'left' || 'right' }
+	 * { titleSize: '18px' }
+	 * { titleColor: '#000000' }
+	 * { gridBorderColor: '#000000AA' }
+	 * ```
+	 * @param {Boolean} options.showLabel
+	 * @param {String} options.title
+	 * @param {String} options.titleAlign
+	 * @param {String} options.titleSize
+	 * @param {String} options.titleColor
+	 * @param {Boolean} options.grid
+	 * @param {String} options.gridBorderColor
+	 * ---
+	 * @param {Boolean} showLabel  **Boolean** Enable / Disable chart label
+	 * @param {String} title **String** Set chart title
+	 * @param {String} titleAlign **String** add title alignment
+	 * @param {String} titleSize **String** Set the title font size (in pixel)
+	 * @param {String} titleColor **String** Set title color
+	 * @param {Boolean} grid **Boolean** Enable / Disable the grid behind the chart
+	 * @param {String} gridBorderColor **String** set grid color
+	 */
 	constructor(options) {
 		this.default = {
 			toolbar: {
@@ -151,15 +189,34 @@ class MyChartDefault {
 			}
 		}
 	}
-
-	static get_toolbar() {
-		return this.default.toolbar;
-	}
 }
 
 
-
 class MyChart extends MyChartDefault {
+	/**
+	 * @param {object} options
+	 * @param {String} options.id
+	 * @param {list<object,number>} options.series
+	 * @param {Boolean} options.showLabelOnXAxis
+	 * @param {Boolean} options.showLabelOnYAxis
+	 * @param {String} options.labelColor
+	 * @param {String} options.xLabelColor
+	 * @param {String} options.yLabelColor
+	 * @param {list<String,number>} options.labels
+	 * @param {Boolean} options.labelXisNumber
+	 * @param {Boolean} options.labelYisNumber
+	 * ---
+	 * @param {String} id **String** HTML Element's ID
+	 * @param {list<object,number>} series **List<Object<key, value>, Number>**The data to add to the chart
+	 * @param {Boolean} showLabelOnXAxis **Boolean** Enable / Disable label on X Axes
+	 * @param {Boolean} showLabelOnYAxis **Boolean** Enable / Disable label on Y Axes
+	 * @param {String} labelColor **String** Set a color for label on both axes
+	 * @param {String} xLabelColor **String** Set a color for the label on the x axes
+	 * @param {String} yLabelColor **String** Set a color for the label on the y axes
+	 * @param {list<String,number>} labels **List<String, Any>** Set chart labels
+	 * @param {Boolean} labelXisNumber **Boolean** Enable / Disable number formatter for x axis
+	 * @param {Boolean} labelYisNumber **Boolean** Enable / Disable number formatter for y axis
+	 */
 	constructor(options={}) {
 		super(options);
 		this.element = document.getElementById(options.id);
@@ -198,6 +255,25 @@ class MyChart extends MyChartDefault {
 		this.update();
 	}
 
+	/**
+	 * @param {String} type set the type of chart
+	 * @param {object} options 
+	 * @param {String} options.id
+	 * @param {Int} options.height
+	 * @param {list<object,Number>} options.series
+	 * @param {list<String,any} options.labels
+	 * @param {Boolean} options.isXDate
+	 * @param {Boolean} options.isYDate
+	 * @param {Boolean} options.debug
+	 * ---
+	 * @param {String} options.id **String** HTML Element's ID of chart container
+	 * @param {Int} options.height **Int** Set chart height (in pixels)
+	 * @param {list<object,Number>} options.series **List<Object,Number>** Set the data for the chart
+	 * @param {list<String,any} options.labels **List<String, Any>** Set chart labels
+	 * @param {Boolean} options.isXDate **Boolean** Set labels on the X axis as Datetime
+	 * @param {Boolean} options.isYDate **Boolean** Set labels on the Y axis as Datetime
+	 * @param {Boolean} options.debug **Boolean** Enable / Disable debug message on console
+	 */
 	addData(type, options={}) {
 		this.config.chart = {
 			id: options?.id,
@@ -218,16 +294,91 @@ class MyChart extends MyChartDefault {
 		this.chart.render();
 	}
 
+	/**
+	 * @param {Number} val Number to format
+	 * @param {object} options 
+	 * @param {String} options.before **Boolean** Add a string before the number
+	 * @param {String} options.after **Boolean** Add a string after the number
+	 * @param {Int} options.minimumFractionDigits **Int** Set the minimum number of fractional digits
+	 * @returns {String} Number formatted correctly with also the before and after string (if any)
+	 */
 	#_numberFormatter(val, options={}) {
 		return (options?.before || '') + this.#_getNumber(val, options?.minimumFractionDigits || 0) + (options?.after || '');
 	}
 
+	/**
+	 * @param {Number} val Number to format
+	 * @param {Int} minimumFractionDigits **Int** Set the minimum number of fractional digits
+	 * @returns {String} Number formatted correctly
+	 */
 	#_getNumber(val, minimumFractionDigits=0) {
 		return (+val).toLocaleString(undefined, { minimumFractionDigits });
 	}
 }
 
 class AreaChart extends MyChart {
+	/**
+	 * @param {object} options
+	 * ```js
+	 * { titleAlign: 'center' || 'left' || 'right' }
+	 * { titleSize: '18px' }
+	 * { titleColor: '#000000' }
+	 * { gridBorderColor: '#000000AA' }
+	 * 
+	 * { curve: 'smooth' || 'straight' || 'stepline' }
+	 * { fillTo: 'origin' || 'end' }
+	 * ```
+	 * @param {Boolean} options.showLabel
+	 * @param {String} options.title
+	 * @param {String} options.titleAlign
+	 * @param {String} options.titleSize
+	 * @param {String} options.titleColor
+	 * @param {Boolean} options.grid
+	 * @param {String} options.gridBorderColor
+	 * @param {String} options.id
+	 * @param {list<object,number>} options.series
+	 * @param {list<String,any} options.labels
+	 * @param {Boolean} options.showLabelOnXAxis
+	 * @param {Boolean} options.showLabelOnYAxis
+	 * @param {String} options.labelColor
+	 * @param {String} options.xLabelColor
+	 * @param {String} options.yLabelColor
+	 * @param {Boolean} options.labelXisNumber
+	 * @param {Boolean} options.labelYisNumber
+	 * @param {Int} options.height
+	 * @param {Boolean} options.isXDate
+	 * @param {Boolean} options.isYDate
+	 * @param {Boolean} options.debug
+	 * @param {String} options.curve
+	 * @param {String} options.fillTo
+	 * ---
+	 * @param {Boolean} showLabel  **Boolean** Enable / Disable chart label
+	 * @param {String} title **String** Set chart title
+	 * @param {String} titleAlign **String** add title alignment;
+	 * @param {String} titleSize **String** Set the title font size (in pixel)
+	 * @param {String} titleColor **String** Set title color
+	 * @param {Boolean} grid **Boolean** Enable / Disable the grid behind the chart
+	 * @param {String} gridBorderColor **String** set grid color
+	 * @param {String} id **String** HTML Element's ID
+	 * @param {list<object,number>} series The data to add to the chart
+	 * @param {list<String,any} labels **List<String, Any>** Set chart labels
+	 * @param {Boolean} showLabelOnXAxis **Boolean** Enable / Disable label on X Axes
+	 * @param {Boolean} showLabelOnYAxis **Boolean** Enable / Disable label on Y Axes
+	 * @param {String} labelColor **String** Set a color for label on both axes
+	 * @param {String} xLabelColor **String** Set a color for the label on the x axes
+	 * @param {String} yLabelColor **String** Set a color for the label on the y axes
+	 * @param {Boolean} labelXisNumber **Boolean** Enable / Disable number formatter for x axis
+	 * @param {Boolean} labelYisNumber **Boolean** Enable / Disable number formatter for y axis
+	 * @param {Int} height **Int** Set chart height (in pixels)
+	 * @param {Boolean} isXDate **Boolean** Set labels on the X axis as Datetime
+	 * @param {Boolean} isYDate **Boolean** Set labels on the Y axis as Datetime
+	 * @param {Boolean} debug **Boolean** Enable / Disable debug message on console
+	 * ---
+	 * ## Area chart only
+	 * ---
+	 * @param {String} curve **String** Set the type of line
+	 * @param {String} fillTo **String** Set the way you want the charts to be filled
+	 */
 	constructor(options={}) {
 		super(options);
 		this.addData('area', options);
@@ -250,6 +401,72 @@ class AreaChart extends MyChart {
 }
 
 class BarChart extends MyChart {
+	/**
+	 * @param {object} options
+	 * ```js
+	 * { titleAlign: 'center' || 'left' || 'right' }
+	 * { titleSize: '18px' }
+	 * { titleColor: '#000000' }
+	 * { gridBorderColor: '#000000AA' }
+	 * 
+	 * { columnWidth: '70%' }
+	 * { position: 'top' || 'center' || 'bottom' }
+	 * ```
+	 * @param {Boolean} options.showLabel
+	 * @param {String} options.title
+	 * @param {String} options.titleAlign
+	 * @param {String} options.titleSize
+	 * @param {String} options.titleColor
+	 * @param {Boolean} options.grid
+	 * @param {String} options.gridBorderColor
+	 * @param {String} options.id
+	 * @param {list<object,number>} options.series
+	 * @param {list<String,any} options.labels
+	 * @param {Boolean} options.showLabelOnXAxis
+	 * @param {Boolean} options.showLabelOnYAxis
+	 * @param {String} options.labelColor
+	 * @param {String} options.xLabelColor
+	 * @param {String} options.yLabelColor
+	 * @param {Boolean} options.labelXisNumber
+	 * @param {Boolean} options.labelYisNumber
+	 * @param {Int} options.height
+	 * @param {Boolean} options.isXDate
+	 * @param {Boolean} options.isYDate
+	 * @param {Boolean} options.debug
+	 * @param {Boolean} options.horizontal
+	 * @param {String} options.columnWidth
+	 * @param {Boolean} options.funnel
+	 * @param {String} options.position
+	 * ---
+	 * @param {Boolean} showLabel  **Boolean** Enable / Disable chart label
+	 * @param {String} title **String** Set chart title
+	 * @param {String} titleAlign **String** add title alignment;
+	 * @param {String} titleSize **String** Set the title font size (in pixel)
+	 * @param {String} titleColor **String** Set title color
+	 * @param {Boolean} grid **Boolean** Enable / Disable the grid behind the chart
+	 * @param {String} gridBorderColor **String** set grid color
+	 * @param {String} id **String** HTML Element's ID
+	 * @param {list<object,number>} series The data to add to the chart
+	 * @param {list<String,any} labels **List<String, Any>** Set chart labels
+	 * @param {Boolean} showLabelOnXAxis **Boolean** Enable / Disable label on X Axes
+	 * @param {Boolean} showLabelOnYAxis **Boolean** Enable / Disable label on Y Axes
+	 * @param {String} labelColor **String** Set a color for label on both axes
+	 * @param {String} xLabelColor **String** Set a color for the label on the x axes
+	 * @param {String} yLabelColor **String** Set a color for the label on the y axes
+	 * @param {Boolean} labelXisNumber **Boolean** Enable / Disable number formatter for x axis
+	 * @param {Boolean} labelYisNumber **Boolean** Enable / Disable number formatter for y axis
+	 * @param {Int} height **Int** Set chart height (in pixels)
+	 * @param {Boolean} isXDate **Boolean** Set labels on the X axis as Datetime
+	 * @param {Boolean} isYDate **Boolean** Set labels on the Y axis as Datetime
+	 * @param {Boolean} debug **Boolean** Enable / Disable debug message on console
+	 * ---
+	 * ## Bar chart only
+	 * ---
+	 * @param {Boolean} horizontal **Boolean** Draw the bars horizontal or vertical
+	 * @param {String} columnWidth **String** Set the width of the bars
+	 * @param {Boolean} funnel **Boolean** Draw all of the bars from the center to create a funnel
+	 * @param {String} position **String** Set the label position
+	 */
 	constructor(options={}) {
 		super(options);
 		this.addData('bar', options);
@@ -269,6 +486,77 @@ class BarChart extends MyChart {
 }
 
 class LineChart extends MyChart {
+	/**
+	 * @param {object} options
+	 * ```js
+	 * { titleAlign: 'center' || 'left' || 'right' }
+	 * { titleSize: '18px' }
+	 * { titleColor: '#000000' }
+	 * { gridBorderColor: '#000000AA' }
+	 * 
+	 * { curve: 'smooth' || 'straight' || 'stepline' }
+	 * { markersColor: '#000000' }
+	 * { markersShape: 'circle' || 'square' }
+	 * ```
+	 * @param {Boolean} options.showLabel
+	 * @param {String} options.title
+	 * @param {String} options.titleAlign
+	 * @param {String} options.titleSize
+	 * @param {String} options.titleColor
+	 * @param {Boolean} options.grid
+	 * @param {String} options.gridBorderColor
+	 * @param {String} options.id
+	 * @param {list<object,number>} options.series
+	 * @param {list<String,any} options.labels
+	 * @param {Boolean} options.showLabelOnXAxis
+	 * @param {Boolean} options.showLabelOnYAxis
+	 * @param {String} options.labelColor
+	 * @param {String} options.xLabelColor
+	 * @param {String} options.yLabelColor
+	 * @param {Boolean} options.labelXisNumber
+	 * @param {Boolean} options.labelYisNumber
+	 * @param {Int} options.height
+	 * @param {Boolean} options.isXDate
+	 * @param {Boolean} options.isYDate
+	 * @param {Boolean} options.debug
+	 * @param {String} options.curve
+	 * @param {Int} options.markers
+	 * @param {Int} options.markersHover
+	 * @param {String} options.markersColor
+	 * @param {String} options.markersShape
+	 * @param {Function} options.markersOnClick
+	 * ---
+	 * @param {Boolean} showLabel  **Boolean** Enable / Disable chart label
+	 * @param {String} title **String** Set chart title
+	 * @param {String} titleAlign **String** add title alignment;
+	 * @param {String} titleSize **String** Set the title font size (in pixel)
+	 * @param {String} titleColor **String** Set title color
+	 * @param {Boolean} grid **Boolean** Enable / Disable the grid behind the chart
+	 * @param {String} gridBorderColor **String** set grid color
+	 * @param {String} id **String** HTML Element's ID
+	 * @param {list<object,number>} series The data to add to the chart
+	 * @param {list<String,any} labels **List<String, Any>** Set chart labels
+	 * @param {Boolean} showLabelOnXAxis **Boolean** Enable / Disable label on X Axes
+	 * @param {Boolean} showLabelOnYAxis **Boolean** Enable / Disable label on Y Axes
+	 * @param {String} labelColor **String** Set a color for label on both axes
+	 * @param {String} xLabelColor **String** Set a color for the label on the x axes
+	 * @param {String} yLabelColor **String** Set a color for the label on the y axes
+	 * @param {Boolean} labelXisNumber **Boolean** Enable / Disable number formatter for x axis
+	 * @param {Boolean} labelYisNumber **Boolean** Enable / Disable number formatter for y axis
+	 * @param {Int} height **Int** Set chart height (in pixels)
+	 * @param {Boolean} isXDate **Boolean** Set labels on the X axis as Datetime
+	 * @param {Boolean} isYDate **Boolean** Set labels on the Y axis as Datetime
+	 * @param {Boolean} debug **Boolean** Enable / Disable debug message on console
+	 * ---
+	 * ## Line chart only
+	 * ---
+	 * @param {String} curve **String** Set the type of line
+	 * @param {Int} markers **Int** Set the size of markers (in pixels)
+	 * @param {Int} markersHover **Int** Set the size of the marker when mouse is on top
+	 * @param {String} markersColor **String** Set markers color
+	 * @param {String} markersShape **String** Set marker's Shape
+	 * @param {Function} markersOnClick **Function** Callback that's called if you click a marker
+	 */
 	constructor(options={}) {
 		super(options);
 		this.addData('line', options);
@@ -305,6 +593,70 @@ class LineChart extends MyChart {
 }
 
 class PieChart extends MyChart {
+	/**
+	 * @param {object} options
+	 * ```js
+	 * { titleAlign: 'center' || 'left' || 'right' }
+	 * { titleSize: '18px' }
+	 * { titleColor: '#000000' }
+	 * { gridBorderColor: '#000000AA' }
+	 * 
+	 * { position: 'top' || 'bottom' || 'left' || 'right' }
+	 * { align: 'center' || 'left' || 'right' }
+	 * ```
+	 * @param {Boolean} options.showLabel
+	 * @param {String} options.title
+	 * @param {String} options.titleAlign
+	 * @param {String} options.titleSize
+	 * @param {String} options.titleColor
+	 * @param {Boolean} options.grid
+	 * @param {String} options.gridBorderColor
+	 * @param {String} options.id
+	 * @param {list<object,number>} options.series
+	 * @param {list<String,any} options.labels
+	 * @param {Boolean} options.showLabelOnXAxis
+	 * @param {Boolean} options.showLabelOnYAxis
+	 * @param {String} options.labelColor
+	 * @param {String} options.xLabelColor
+	 * @param {String} options.yLabelColor
+	 * @param {Boolean} options.labelXisNumber
+	 * @param {Boolean} options.labelYisNumber
+	 * @param {Int} options.height
+	 * @param {Boolean} options.isXDate
+	 * @param {Boolean} options.isYDate
+	 * @param {Boolean} options.debug
+	 * @param {Boolean} options.showLegend
+	 * @param {String} options.position
+	 * @param {String} options.align
+	 * ---
+	 * @param {Boolean} showLabel  **Boolean** Enable / Disable chart label
+	 * @param {String} title **String** Set chart title
+	 * @param {String} titleAlign **String** add title alignment;
+	 * @param {String} titleSize **String** Set the title font size (in pixel)
+	 * @param {String} titleColor **String** Set title color
+	 * @param {Boolean} grid **Boolean** Enable / Disable the grid behind the chart
+	 * @param {String} gridBorderColor **String** set grid color
+	 * @param {String} id **String** HTML Element's ID
+	 * @param {list<object,number>} series The data to add to the chart
+	 * @param {list<String,any} labels **List<String, Any>** Set chart labels
+	 * @param {Boolean} showLabelOnXAxis **Boolean** Enable / Disable label on X Axes
+	 * @param {Boolean} showLabelOnYAxis **Boolean** Enable / Disable label on Y Axes
+	 * @param {String} labelColor **String** Set a color for label on both axes
+	 * @param {String} xLabelColor **String** Set a color for the label on the x axes
+	 * @param {String} yLabelColor **String** Set a color for the label on the y axes
+	 * @param {Boolean} labelXisNumber **Boolean** Enable / Disable number formatter for x axis
+	 * @param {Boolean} labelYisNumber **Boolean** Enable / Disable number formatter for y axis
+	 * @param {Int} height **Int** Set chart height (in pixels)
+	 * @param {Boolean} isXDate **Boolean** Set labels on the X axis as Datetime
+	 * @param {Boolean} isYDate **Boolean** Set labels on the Y axis as Datetime
+	 * @param {Boolean} debug **Boolean** Enable / Disable debug message on console
+	 * ---
+	 * ## Pie chart only
+	 * @param {Boolean} showLegend Enable / Disable the legend
+	 * @param {String} position Set legend position
+	 * @param {Strin} align Set legend alignment
+	 * ---
+	 */
 	constructor(options={}) {
 		super(options);
 		this.addData('pie', options);
@@ -329,6 +681,73 @@ class PieChart extends MyChart {
 }
 
 class DonutChart extends MyChart {
+	/**
+	 * @param {object} options
+	 * ```js
+	 * { titleAlign: 'center' || 'left' || 'right' }
+	 * { titleSize: '18px' }
+	 * { titleColor: '#000000' }
+	 * { gridBorderColor: '#000000AA' }
+	 * 
+	 * { position: 'top' || 'bottom' || 'left' || 'right' }
+	 * { align: 'center' || 'left' || 'right' }
+	 * { size: '65%' }
+	 * ```
+	 * @param {Boolean} options.showLabel
+	 * @param {String} options.title
+	 * @param {String} options.titleAlign
+	 * @param {String} options.titleSize
+	 * @param {String} options.titleColor
+	 * @param {Boolean} options.grid
+	 * @param {String} options.gridBorderColor
+	 * @param {String} options.id
+	 * @param {list<object,number>} options.series
+	 * @param {list<String,any} options.labels
+	 * @param {Boolean} options.showLabelOnXAxis
+	 * @param {Boolean} options.showLabelOnYAxis
+	 * @param {String} options.labelColor
+	 * @param {String} options.xLabelColor
+	 * @param {String} options.yLabelColor
+	 * @param {Boolean} options.labelXisNumber
+	 * @param {Boolean} options.labelYisNumber
+	 * @param {Int} options.height
+	 * @param {Boolean} options.isXDate
+	 * @param {Boolean} options.isYDate
+	 * @param {Boolean} options.debug
+	 * @param {Boolean} options.showLegend
+	 * @param {String} options.position
+	 * @param {String} options.align
+	 * @param {String} options.size
+	 * ---
+	 * @param {Boolean} showLabel  **Boolean** Enable / Disable chart label
+	 * @param {String} title **String** Set chart title
+	 * @param {String} titleAlign **String** add title alignment;
+	 * @param {String} titleSize **String** Set the title font size (in pixel)
+	 * @param {String} titleColor **String** Set title color
+	 * @param {Boolean} grid **Boolean** Enable / Disable the grid behind the chart
+	 * @param {String} gridBorderColor **String** set grid color
+	 * @param {String} id **String** HTML Element's ID
+	 * @param {list<object,number>} series The data to add to the chart
+	 * @param {list<String,any} labels **List<String, Any>** Set chart labels
+	 * @param {Boolean} showLabelOnXAxis **Boolean** Enable / Disable label on X Axes
+	 * @param {Boolean} showLabelOnYAxis **Boolean** Enable / Disable label on Y Axes
+	 * @param {String} labelColor **String** Set a color for label on both axes
+	 * @param {String} xLabelColor **String** Set a color for the label on the x axes
+	 * @param {String} yLabelColor **String** Set a color for the label on the y axes
+	 * @param {Boolean} labelXisNumber **Boolean** Enable / Disable number formatter for x axis
+	 * @param {Boolean} labelYisNumber **Boolean** Enable / Disable number formatter for y axis
+	 * @param {Int} height **Int** Set chart height (in pixels)
+	 * @param {Boolean} isXDate **Boolean** Set labels on the X axis as Datetime
+	 * @param {Boolean} isYDate **Boolean** Set labels on the Y axis as Datetime
+	 * @param {Boolean} debug **Boolean** Enable / Disable debug message on console
+	 * ---
+	 * ## Donut chart only
+	 * @param {Boolean} showLegend Enable / Disable the legend
+	 * @param {String} position Set legend position
+	 * @param {String} align Set legend alignment
+	 * @param {String} size Set the donut hole size
+	 * ---
+	 */
 	constructor(options={}) {
 		super(options);
 		this.addData('donut', options);
@@ -356,6 +775,70 @@ class DonutChart extends MyChart {
 }
 
 class PolarAreaChart extends MyChart {
+	/**
+	 * @param {object} options
+	 * ```js
+	 * { titleAlign: 'center' || 'left' || 'right' }
+	 * { titleSize: '18px' }
+	 * { titleColor: '#000000' }
+	 * { gridBorderColor: '#000000AA' }
+	 * 
+	 * { position: 'top' || 'bottom' || 'left' || 'right' }
+	 * { align: 'center' || 'left' || 'right' }
+	 * ```
+	 * @param {Boolean} options.showLabel
+	 * @param {String} options.title
+	 * @param {String} options.titleAlign
+	 * @param {String} options.titleSize
+	 * @param {String} options.titleColor
+	 * @param {Boolean} options.grid
+	 * @param {String} options.gridBorderColor
+	 * @param {String} options.id
+	 * @param {list<object,number>} options.series
+	 * @param {list<String,any} options.labels
+	 * @param {Boolean} options.showLabelOnXAxis
+	 * @param {Boolean} options.showLabelOnYAxis
+	 * @param {String} options.labelColor
+	 * @param {String} options.xLabelColor
+	 * @param {String} options.yLabelColor
+	 * @param {Boolean} options.labelXisNumber
+	 * @param {Boolean} options.labelYisNumber
+	 * @param {Int} options.height
+	 * @param {Boolean} options.isXDate
+	 * @param {Boolean} options.isYDate
+	 * @param {Boolean} options.debug
+	 * @param {Boolean} options.showLegend
+	 * @param {String} options.position
+	 * @param {String} options.align
+	 * ---
+	 * @param {Boolean} showLabel  **Boolean** Enable / Disable chart label
+	 * @param {String} title **String** Set chart title
+	 * @param {String} titleAlign **String** add title alignment;
+	 * @param {String} titleSize **String** Set the title font size (in pixel)
+	 * @param {String} titleColor **String** Set title color
+	 * @param {Boolean} grid **Boolean** Enable / Disable the grid behind the chart
+	 * @param {String} gridBorderColor **String** set grid color
+	 * @param {String} id **String** HTML Element's ID
+	 * @param {list<object,number>} series The data to add to the chart
+	 * @param {list<String,any} labels **List<String, Any>** Set chart labels
+	 * @param {Boolean} showLabelOnXAxis **Boolean** Enable / Disable label on X Axes
+	 * @param {Boolean} showLabelOnYAxis **Boolean** Enable / Disable label on Y Axes
+	 * @param {String} labelColor **String** Set a color for label on both axes
+	 * @param {String} xLabelColor **String** Set a color for the label on the x axes
+	 * @param {String} yLabelColor **String** Set a color for the label on the y axes
+	 * @param {Boolean} labelXisNumber **Boolean** Enable / Disable number formatter for x axis
+	 * @param {Boolean} labelYisNumber **Boolean** Enable / Disable number formatter for y axis
+	 * @param {Int} height **Int** Set chart height (in pixels)
+	 * @param {Boolean} isXDate **Boolean** Set labels on the X axis as Datetime
+	 * @param {Boolean} isYDate **Boolean** Set labels on the Y axis as Datetime
+	 * @param {Boolean} debug **Boolean** Enable / Disable debug message on console
+	 * ---
+	 * ## Polar Area chart only
+	 * @param {Boolean} showLegend Enable / Disable the legend
+	 * @param {String} position Set legend position
+	 * @param {Strin} align Set legend alignment
+	 * ---
+	 */
 	constructor(options={}) {
 		super(options);
 	
@@ -373,13 +856,67 @@ class PolarAreaChart extends MyChart {
 			this.config.legend.horizontalAlign = options?.align || 'center'
 		} else throw new Error(`Align: "${options?.align}" not valid; Accepted: ${possibleAlign.join(', ')}`)
 
-
 		this.addData('polarArea', options);
 		this.draw();
 	}
 }
 
 class RadarChart extends MyChart {
+	/**
+	 * @param {object} options
+	 * ```js
+	 * { titleAlign: 'center' || 'left' || 'right' }
+	 * { titleSize: '18px' }
+	 * { titleColor: '#000000' }
+	 * { gridBorderColor: '#000000AA' }
+	 * ```
+	 * @param {Boolean} options.showLabel
+	 * @param {String} options.title
+	 * @param {String} options.titleAlign
+	 * @param {String} options.titleSize
+	 * @param {String} options.titleColor
+	 * @param {Boolean} options.grid
+	 * @param {String} options.gridBorderColor
+	 * @param {String} options.id
+	 * @param {list<object,number>} options.series
+	 * @param {list<String,any} options.labels
+	 * @param {Boolean} options.showLabelOnXAxis
+	 * @param {Boolean} options.showLabelOnYAxis
+	 * @param {String} options.labelColor
+	 * @param {String} options.xLabelColor
+	 * @param {String} options.yLabelColor
+	 * @param {Boolean} options.labelXisNumber
+	 * @param {Boolean} options.labelYisNumber
+	 * @param {Int} options.height
+	 * @param {Boolean} options.isXDate
+	 * @param {Boolean} options.isYDate
+	 * @param {Boolean} options.debug
+	 * ---
+	 * @param {Boolean} showLabel  **Boolean** Enable / Disable chart label
+	 * @param {String} title **String** Set chart title
+	 * @param {String} titleAlign **String** add title alignment;
+	 * @param {String} titleSize **String** Set the title font size (in pixel)
+	 * @param {String} titleColor **String** Set title color
+	 * @param {Boolean} grid **Boolean** Enable / Disable the grid behind the chart
+	 * @param {String} gridBorderColor **String** set grid color
+	 * @param {String} id **String** HTML Element's ID
+	 * @param {list<object,number>} series The data to add to the chart
+	 * @param {list<String,any} labels **List<String, Any>** Set chart labels
+	 * @param {Boolean} showLabelOnXAxis **Boolean** Enable / Disable label on X Axes
+	 * @param {Boolean} showLabelOnYAxis **Boolean** Enable / Disable label on Y Axes
+	 * @param {String} labelColor **String** Set a color for label on both axes
+	 * @param {String} xLabelColor **String** Set a color for the label on the x axes
+	 * @param {String} yLabelColor **String** Set a color for the label on the y axes
+	 * @param {Boolean} labelXisNumber **Boolean** Enable / Disable number formatter for x axis
+	 * @param {Boolean} labelYisNumber **Boolean** Enable / Disable number formatter for y axis
+	 * @param {Int} height **Int** Set chart height (in pixels)
+	 * @param {Boolean} isXDate **Boolean** Set labels on the X axis as Datetime
+	 * @param {Boolean} isYDate **Boolean** Set labels on the Y axis as Datetime
+	 * @param {Boolean} debug **Boolean** Enable / Disable debug message on console
+	 * ---
+	 * ## Radar chart only
+	 * ---
+	 */
 	constructor(options={}) {
 		super(options);
 		this.addData('radar', options);
@@ -398,6 +935,68 @@ class RadarChart extends MyChart {
 }
 
 class ProgressChart extends MyChart {
+	/**
+	 * @param {object} options
+	 * ```js
+	 * { titleAlign: 'center' || 'left' || 'right' }
+	 * { titleSize: '18px' }
+	 * { titleColor: '#000000' }
+	 * { gridBorderColor: '#000000AA' }
+	 * 
+	 * { position: 'top' || 'bottom' || 'left' || 'right' }
+	 * { align: 'center' || 'left' || 'right' }
+	 * ```
+	 * @param {Boolean} options.showLabel
+	 * @param {String} options.title
+	 * @param {String} options.titleAlign
+	 * @param {String} options.titleSize
+	 * @param {String} options.titleColor
+	 * @param {Boolean} options.grid
+	 * @param {String} options.gridBorderColor
+	 * @param {String} options.id
+	 * @param {list<object,number>} options.series
+	 * @param {list<String,any} options.labels
+	 * @param {Boolean} options.showLabelOnXAxis
+	 * @param {Boolean} options.showLabelOnYAxis
+	 * @param {String} options.labelColor
+	 * @param {String} options.xLabelColor
+	 * @param {String} options.yLabelColor
+	 * @param {Boolean} options.labelXisNumber
+	 * @param {Boolean} options.labelYisNumber
+	 * @param {Int} options.height
+	 * @param {Boolean} options.isXDate
+	 * @param {Boolean} options.isYDate
+	 * @param {Boolean} options.debug
+	 * @param {Number} options.startAngle
+	 * @param {Number} options.endAngle
+	 * ---
+	 * @param {Boolean} showLabel  **Boolean** Enable / Disable chart label
+	 * @param {String} title **String** Set chart title
+	 * @param {String} titleAlign **String** add title alignment;
+	 * @param {String} titleSize **String** Set the title font size (in pixel)
+	 * @param {String} titleColor **String** Set title color
+	 * @param {Boolean} grid **Boolean** Enable / Disable the grid behind the chart
+	 * @param {String} gridBorderColor **String** set grid color
+	 * @param {String} id **String** HTML Element's ID
+	 * @param {list<object,number>} series The data to add to the chart
+	 * @param {list<String,any} labels **List<String, Any>** Set chart labels
+	 * @param {Boolean} showLabelOnXAxis **Boolean** Enable / Disable label on X Axes
+	 * @param {Boolean} showLabelOnYAxis **Boolean** Enable / Disable label on Y Axes
+	 * @param {String} labelColor **String** Set a color for label on both axes
+	 * @param {String} xLabelColor **String** Set a color for the label on the x axes
+	 * @param {String} yLabelColor **String** Set a color for the label on the y axes
+	 * @param {Boolean} labelXisNumber **Boolean** Enable / Disable number formatter for x axis
+	 * @param {Boolean} labelYisNumber **Boolean** Enable / Disable number formatter for y axis
+	 * @param {Int} height **Int** Set chart height (in pixels)
+	 * @param {Boolean} isXDate **Boolean** Set labels on the X axis as Datetime
+	 * @param {Boolean} isYDate **Boolean** Set labels on the Y axis as Datetime
+	 * @param {Boolean} debug **Boolean** Enable / Disable debug message on console
+	 * ---
+	 * ## Progress chart only
+	 * @param {Number} startAngle **Number** Set progress chart starting angle
+	 * @param {Number} endAngle **Number** Set progress chart ending angle
+	 * ---
+	 */
 	constructor(options={}) {
 		super(options);
 
@@ -413,6 +1012,73 @@ class ProgressChart extends MyChart {
 }
 
 class HeatmapChart extends MyChart {
+	/**
+	 * @param {object} options
+	 * ```js
+	 * { titleAlign: 'center' || 'left' || 'right' }
+	 * { titleSize: '18px' }
+	 * { titleColor: '#000000' }
+	 * { gridBorderColor: '#000000AA' }
+	 * 
+	 * {
+	 * 	rangeColor: [
+	 * 		{ from: 0,   to: 100, color: '#FFFF00', name: '0-100'   },
+	 * 		{ from: 101, to: 200, color: '#FFAA00', name: '101-200' },
+	 * 		{ from: 201, to: 300, color: '#FF0000', name: '201-300' },
+	 * 	]
+	 * }
+	 * ```
+	 * @param {Boolean} options.showLabel
+	 * @param {String} options.title
+	 * @param {String} options.titleAlign
+	 * @param {String} options.titleSize
+	 * @param {String} options.titleColor
+	 * @param {Boolean} options.grid
+	 * @param {String} options.gridBorderColor
+	 * @param {String} options.id
+	 * @param {list<object,number>} options.series
+	 * @param {list<String,any} options.labels
+	 * @param {Boolean} options.showLabelOnXAxis
+	 * @param {Boolean} options.showLabelOnYAxis
+	 * @param {String} options.labelColor
+	 * @param {String} options.xLabelColor
+	 * @param {String} options.yLabelColor
+	 * @param {Boolean} options.labelXisNumber
+	 * @param {Boolean} options.labelYisNumber
+	 * @param {Int} options.height
+	 * @param {Boolean} options.isXDate
+	 * @param {Boolean} options.isYDate
+	 * @param {Boolean} options.debug
+	 * @param {Boolean} options.useFillColorAsStroke
+	 * @param {list<object>} options.rangeColor
+	 * ---
+	 * @param {Boolean} showLabel  **Boolean** Enable / Disable chart label
+	 * @param {String} title **String** Set chart title
+	 * @param {String} titleAlign **String** add title alignment;
+	 * @param {String} titleSize **String** Set the title font size (in pixel)
+	 * @param {String} titleColor **String** Set title color
+	 * @param {Boolean} grid **Boolean** Enable / Disable the grid behind the chart
+	 * @param {String} gridBorderColor **String** set grid color
+	 * @param {String} id **String** HTML Element's ID
+	 * @param {list<object,number>} series The data to add to the chart
+	 * @param {list<String,any} labels **List<String, Any>** Set chart labels
+	 * @param {Boolean} showLabelOnXAxis **Boolean** Enable / Disable label on X Axes
+	 * @param {Boolean} showLabelOnYAxis **Boolean** Enable / Disable label on Y Axes
+	 * @param {String} labelColor **String** Set a color for label on both axes
+	 * @param {String} xLabelColor **String** Set a color for the label on the x axes
+	 * @param {String} yLabelColor **String** Set a color for the label on the y axes
+	 * @param {Boolean} labelXisNumber **Boolean** Enable / Disable number formatter for x axis
+	 * @param {Boolean} labelYisNumber **Boolean** Enable / Disable number formatter for y axis
+	 * @param {Int} height **Int** Set chart height (in pixels)
+	 * @param {Boolean} isXDate **Boolean** Set labels on the X axis as Datetime
+	 * @param {Boolean} isYDate **Boolean** Set labels on the Y axis as Datetime
+	 * @param {Boolean} debug **Boolean** Enable / Disable debug message on console
+	 * ---
+	 * ## Heatmap chart only
+	 * @param {Boolean} useFillColorAsStroke **Boolean** Show the stroke with the same color of the content
+	 * @param {list<object>} rangeColor **List<object>** Set the color and name for a range of values
+	 * ---
+	 */
 	constructor(options={}) {
 		super(options);
 		this.addData('heatmap', options);

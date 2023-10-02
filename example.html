@@ -17,7 +17,6 @@
 				},
 				dataLabels: { enabled: false },
 			}
-			
 			function randomNumber(min, max) {
 				return Math.floor(Math.random() * (Math.max(min, max) - Math.min(min, max)) + Math.min(min, max))
 			}
@@ -38,7 +37,6 @@
 				}
 				return this;
 			};
-
 			const labels1 = [
 				'Gennaio', 'Febbario', 'Marzo',
 				'Aprile', 'Maggio', 'Giugno',
@@ -107,13 +105,13 @@
 					labels: labels2,
 					title: 'Class HeatmapChart',
 					rangeColor: [
-						{ from: 0,  to: 15,  color: Color.blend('#00FF00', '#FF0000', 1 / 6 * 0), name: '0-15'  },
-						{ from: 16, to: 30,  color: Color.blend('#00FF00', '#FF0000', 1 / 6 * 1), name: '16-30' },
-						{ from: 31, to: 45,  color: Color.blend('#00FF00', '#FF0000', 1 / 6 * 2), name: '31-45' },
-						{ from: 46, to: 60,  color: Color.blend('#00FF00', '#FF0000', 1 / 6 * 3), name: '46-60' },
-						{ from: 61, to: 75,  color: Color.blend('#00FF00', '#FF0000', 1 / 6 * 4), name: '61-75' },
-						{ from: 76, to: 90,  color: Color.blend('#00FF00', '#FF0000', 1 / 6 * 5), name: '76-90' },
-						{ from: 91, to: 100, color: Color.blend('#00FF00', '#FF0000', 1 / 6 * 6), name: '91+'   },
+						{ from: 0,  to: 15,  color: Color.blend('#AAAAAA', '#8f00ff', 1 / 6 * 0), name: '0-15'  },
+						{ from: 16, to: 30,  color: Color.blend('#AAAAAA', '#8f00ff', 1 / 6 * 1), name: '16-30' },
+						{ from: 31, to: 45,  color: Color.blend('#AAAAAA', '#8f00ff', 1 / 6 * 2), name: '31-45' },
+						{ from: 46, to: 60,  color: Color.blend('#AAAAAA', '#8f00ff', 1 / 6 * 3), name: '46-60' },
+						{ from: 61, to: 75,  color: Color.blend('#AAAAAA', '#8f00ff', 1 / 6 * 4), name: '61-75' },
+						{ from: 76, to: 90,  color: Color.blend('#AAAAAA', '#8f00ff', 1 / 6 * 5), name: '76-90' },
+						{ from: 91, to: 100, color: Color.blend('#AAAAAA', '#8f00ff', 1 / 6 * 6), name: '91+'   },
 					],
 					useFillColorAsStroke: false,
 					debug

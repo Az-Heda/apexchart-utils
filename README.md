@@ -60,7 +60,7 @@ const uniqueOptions = {
 	...commonOptions,
 	curve: 'smooth' || 'straight' || 'stepline', // Specify the type of line
 	markers: 5, // Size of markers (pixels)
-	markersHover: 7, // Size of the marker when mouse is over
+	markersHover: 7, // Size of the marker when mouse is on top
 	markersColor: '#FF0000', // Color the markers
 	markersShape: 'circle' || 'square', // Set markers shape
 	markersOnClick: (event) => { console.log(event) }, // Function to be called when you click on a marker

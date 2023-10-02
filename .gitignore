@@ -3,3 +3,4 @@ out/
 
 package.json
 package-lock.json
+test.*
