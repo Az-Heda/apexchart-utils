@@ -9,6 +9,7 @@
 	- [Donut chart](#donutchart)
 	- [Polar Area chart](#polarareachart)
 	- [Radar chart](#radarchart)
+	- [Progress chart](#progresschart)
 	- [Heatmap chart](#heatmapchart)
 - [Color class](#color-class)
 	- [Blend](#blend-colors)
